@@ -12,6 +12,12 @@ const directMessage = new mongoose.Schema({
     message: {
         type: String,
     },
+    fromName: {
+        type: String,
+    },
+    toName: {
+        type: String,
+    },
 
 });
 

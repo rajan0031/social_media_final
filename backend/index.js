@@ -11,7 +11,13 @@ const likesRoutes = require("./routes/blogLikesCount");
 const messageRoutes = require("./routes/directMessage");
 const followRoutes = require("./routes/follow Routes/followRoutes")
 
-const messageEditAndDeleteRoute = require("./routes/message_edit_and_delete_routes/message_edit_and_delete_route")
+const messageEditAndDeleteRoute = require("./routes/message_edit_and_delete_routes/message_edit_and_delete_route");
+
+const searchResultsRoutes = require("./routes/searchResultsRoutes/searchResultsRoutes");
+
+const recentMessageRoutes = require("./routes/recentMessagesRoutes/recentMessagesRoutes");
+
+
 
 app.use(cors());
 app.use(express.json());
@@ -56,7 +62,16 @@ app.use('/', messageEditAndDeleteRoute);
 
 // this is my followers routes
 
-app.use('/', followRoutes)
+app.use('/', followRoutes);
+
+// this is the my search results routes
+
+app.use('/', searchResultsRoutes);
+
+
+// this is the my search results routes
+
+app.use('/', recentMessageRoutes);
 
 
 
@@ -79,7 +94,7 @@ app.get("/", (req, res) => {
 });
 
 
-const PORT = 8080;  // specify the port number
+const PORT = process.env.PORT || 8080;  // specify the port number
 app.listen(process.env.PORT, (err) => {
     if (err) {
         console.log(err);

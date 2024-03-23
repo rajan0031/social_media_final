@@ -175,7 +175,7 @@ function Home() {
 
 
     return (
-        <div className="container mx-auto mt-10">
+        <div className="container mx-auto px-10  mt-10">
             <div className="mt-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                 {blogs.map((blog, index) => (
                     <div key={index * 2 + 1} className="border p-4 rounded bg-white shadow hover:shadow-lg transition duration-300">
@@ -187,9 +187,9 @@ function Home() {
                             {blog.tags.map((tag, tagIndex) => (
                                 <button onClick={() => handleTags(tag)}
                                     key={tagIndex + 1}
-                                    className="bg-green-300 hover:bg-green-400 text-green-800 py-1 px-2 rounded transition duration-300 ease-in-out"
+                                    className=" bg-green-300 hover:bg-green-400 text-green-800 py-1 px-2 rounded transition duration-300 ease-in-out"
                                 >
-                                    <span key={tagIndex} className="px-2 py-1 text-xs text-gray-700 rounded">
+                                    <span key={tagIndex} className="px-2 py-1  text-xs text-gray-700 rounded">
                                         {tag}
                                     </span>
                                 </button>

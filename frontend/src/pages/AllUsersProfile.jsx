@@ -155,6 +155,16 @@ function AllUsersProfile() {
     }, [handleUnFollow, handleUnFollow]);
 
 
+    // start of the handling the video call features
+
+    const handleVideoCall = () => {
+        console.log("clicked");
+        navigate("/videocall");
+    }
+
+    // end of the handling the video call feature
+
+
 
 
 
@@ -185,6 +195,12 @@ function AllUsersProfile() {
                         >
                             Message
                         </button>
+                            <button
+                                onClick={handleVideoCall}
+                                className="mt-4 bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-700"
+                            >
+                                Video
+                            </button>
                             {
                                 !followingOrNot ? (
                                     <button

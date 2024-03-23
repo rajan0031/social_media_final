@@ -45,6 +45,8 @@ function DirectMessage() {
                     from: from,
                     to: to,
                     message: message,
+                    fromName: fromName,
+                    toName: toName,
                 });
                 // console.log(response);
 

@@ -17,6 +17,10 @@ import DirectMessage from './pages/DirectMessage';
 import ErrorPage from './components/ErrorPage';
 import Followers from './pages/followers/Followers';
 import Following from './pages/following/Following';
+import SearchResults from './components/searchResults/SearchResults';
+import UserRecentMessagesContacts from './components/UserRecentMessagesContacts/UserRecentMessagesContacts';
+import VideoCall from './components/VideoCall/VideoCall';
+
 function App() {
   return (
     <div>
@@ -45,7 +49,9 @@ function App() {
 
             <Route path='/followers' element={<Followers />} />
             <Route path='/followings' element={<Following />} />
-
+            <Route path='/searchresults' element={<SearchResults />} />
+            <Route path='/userrecentmessages' element={<UserRecentMessagesContacts />} />
+            <Route path='/videocall' element={<VideoCall />} />
 
 
 

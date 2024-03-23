@@ -25,7 +25,7 @@ module.exports.addBlog = async (req, res) => {
 
         };
 
-        if (!data.title || !data.author || !data.date || !data.category || !data.content  || !data.imageUrl || !data.featured) {
+        if (!data.title || !data.author || !data.date || !data.category || !data.content || !data.imageUrl || !data.featured) {
             res.json({
                 status: false,
                 message: "All fields are required !"
@@ -94,9 +94,7 @@ module.exports.getAllBlogs = async (req, res) => {
 
 
 
-        const blogs = await Blog.find({
-
-        });
+        const blogs = await Blog.find().sort({ date: -1 });
 
         res.json({
             blogs: blogs,

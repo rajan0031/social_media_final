@@ -7,7 +7,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import { getUserProfile } from '../../utils/apiRoutes';
 import { editUserProfile } from '../../utils/apiRoutes';
 import { useNavigate } from 'react-router-dom';
-
+import message from "../assets/message.png"
 
 
 
@@ -256,7 +256,21 @@ function UserProfile() {
     }
 
 
-    // 
+    // end of the  my followers
+
+    // start of the recent message sections
+
+
+    const handleRecentMessageOfAllUsers = () => {
+        navigate("/userrecentmessages", {
+            state: {
+                user: user,
+            }
+        });
+        // console.log(user._id);
+    }
+
+    // end of the recent message section
 
 
 
@@ -283,7 +297,7 @@ function UserProfile() {
 
             {
                 profileCompleted === true ? (<>  <div className="bg-gray-100 min-h-screen flex items-center justify-center">
-                    <div className="bg-white p-10 rounded shadow-md max-w-md">
+                    <div className="bg-white p-10 rounded shadow-md max-w-xl">
                         <div className="text-center mb-6">
                             <img
                                 src={currentUserProfile?.profileImage}
@@ -344,8 +358,13 @@ function UserProfile() {
                         </div>
 
                         <div className='flex justify-between space-x-4'>
-
-
+                            <button
+                                className="bg-blue-500   hover:bg-blue-600  text-gray-50 text-font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline mt-4 flex items-center justify-center"
+                                onClick={handleRecentMessageOfAllUsers}
+                            >
+                                <img className='  text-gray-50 w-5 h-5 mr-2' src={message} alt="Message" />
+                                <span className="  text-gray-50">Message</span>
+                            </button>
 
                             <button
                                 className="bg-blue-500  hover:bg-blue-600 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline mt-4"

@@ -6,14 +6,16 @@ const Message = require("../Models/directMessage");
 // start of the adding the message to the database
 
 module.exports.addMessage = async (req, res) => {
-    const { from, to, message } = req.body;
-    console.log(from, to, message);
+    const { from, to, message, fromName, toName } = req.body;
+    console.log(from, to, message, fromName, toName);
 
     try {
         const response = await Message.create({
             from: from,
             to: to,
-            message: message
+            message: message,
+            fromName: fromName,
+            toName: toName,
         });
         console.log(response)
         if (response) {
