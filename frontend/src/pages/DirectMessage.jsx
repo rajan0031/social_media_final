@@ -1,46 +1,47 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { useLocation } from 'react-router-dom'
 import axios from 'axios';
 import { addMessage } from '../../utils/apiRoutes';
-// import { toast, ToastContainer } from 'react-toastify/dist/components';
 import { toast } from 'react-toastify';
-import { ToastContainer } from 'react-toastify';
 import { getAllMessage } from '../../utils/apiRoutes';
 import { editMessage } from '../../utils/message_edit_and_delete_api_routes/messageEditDeleteApiRoutes';
 import { deleteMessage } from '../../utils/message_edit_and_delete_api_routes/messageEditDeleteApiRoutes';
+import { io } from "socket.io-client";
 
 function DirectMessage() {
-
     const location = useLocation();
     const from = location.state?.from;
     const to = location.state?.to;
     const fromName = location.state?.fromName;
     const toName = location.state?.toName;
+    const socketId = location.state?.socketId; // Retrieve socket ID from location state
 
+    // Initialize socket using the received socket ID, if available
+    const socket = useRef(socketId ? io(socketId) : null);
+    const scrollRef = useRef();
 
-    // console.log(toName);
-    // console.log(fromName, currentUserDetails);
-    const [message, setMessage] = useState("");
+    useState(() => {
+        console.log(socketId)
+    }, [])
+
+    const [message, setMessage] = useState(''); // Changed from array to string
+    const [arrivalMessage, setArrivalMessage] = useState(null);
     const [messagesFromDataBase, setMessagesFromDatabase] = useState([]);
-    // message id
     const [messageId, setMessageId] = useState("");
-    // new message states
-    const [newMessage, setNewMessage] = useState("");
-    // edit boolean
     const [isEditingMessage, setIsEditingMessage] = useState(false);
-
     const [functionState1, setFunctionState1] = useState(false);
+    const [flag, setFlag] = useState(false);
 
     const handleInputmessage = (e) => {
         setMessage(e.target.value);
     }
+
     const handleMessageSend = async () => {
-        // console.log(message);
         setFunctionState1(true);
+        setFlag(true);
 
         try {
-            if (message.length > 0) {
-
+            if (message.trim().length > 0) { // Trim message before checking length
                 const response = await axios.post(`${addMessage}`, {
                     from: from,
                     to: to,
@@ -48,60 +49,70 @@ function DirectMessage() {
                     fromName: fromName,
                     toName: toName,
                 });
-                // console.log(response);
+
 
                 if (response) {
-                    toast.success("message is sent");
+                    toast.success("Message sent");
                 }
+
+                // const response1 = await axios.post(`${getAllMessage}`, {
+                //     from: from,
+                //     to: to,
+                // });
+                // setMessagesFromDatabase(response1.data.response);
+
             }
             else {
-                console.log(fromName);
+                console.log("Message is empty");
             }
         } catch (err) {
             console.log(err)
         }
 
-        setMessage("")
+        setMessage(""); // Clear message input after sending
+
+        if (socket.current) {
+            socket.current.emit("send-msg", {
+                to: to,
+                from: from,
+                message: message,
+            });
+        } else {
+            console.log("Socket object is NULL");
+        }
     }
+
+    useEffect(() => {
+        if (socket.current) {
+            socket.current.on("msg-recieve", (message) => {
+                setArrivalMessage({
+                    fromSelf: false,
+                    message: message
+                });
+            });
+        }
+    }, []);
+
+    useEffect(() => {
+        arrivalMessage && setMessagesFromDatabase(prevMessages => [...prevMessages, arrivalMessage]); // Update messagesFromDatabase
+    }, [arrivalMessage]);
+
+    useEffect(() => {
+        scrollRef.current?.scrollIntoView({ behavior: 'smooth' });
+    }, [messagesFromDataBase]);
+
     const handleKeyDown = (e) => {
         if (e.key === "Enter") {
-            e.preventDefault(); // Prevents the default behavior of the Enter key
+            e.preventDefault();
             handleMessageSend();
         }
     };
-    // start function to get all the messages from the database 
-    useEffect(() => {
-        const fetch = async () => {
-            try {
-                const response = await axios.post(`${getAllMessage}`, {
-                    from: from,
-                    to: to,
-                });
-                // console.log(response.data.response);
-                setMessagesFromDatabase(response.data.response)
-            } catch (err) {
-                console.log(err)
-            }
-        }
-        fetch();
-    }, [handleMessageSend]);
-
-    // end function to get all the messages from the database 
-
-
-    // message edit starts
 
     const handleEdit = async (msg) => {
-        // console.log("edit", msg._id);
         setIsEditingMessage(true);
         setMessage(msg.message);
         setMessageId(msg._id);
     }
-
-    // message edit ends
-
-
-    // message delete starts
 
     const handleDelete = async (msg) => {
         console.log("delete", msg._id);
@@ -111,18 +122,14 @@ function DirectMessage() {
             });
             console.log(response);
             if (response) {
-                toast.err("your message is deleted");
+                toast.error("Your message is deleted"); // Corrected toast.error
             }
         } catch (err) {
             console.log(err);
         }
     }
 
-    // message delete ends
-
-    // handle final edit message start
     const handleMessageFinalEdit = async () => {
-        // console.log(messageId);
         try {
             const response = await axios.post(`${editMessage}`, {
                 msgId: messageId,
@@ -130,15 +137,33 @@ function DirectMessage() {
             });
             console.log(response);
             if (response) {
-                toast.success("your message is edited successfully");
+                toast.success("Your message is edited successfully");
             }
         } catch (err) {
             console.log(err);
         }
+        // start of the testing fetch message
+
+        // end of the testing the fetch message
+
         setMessage("");
         setIsEditingMessage(false);
     }
-    // handle final edit mmessage ends
+
+    useEffect(() => {
+        const fetchMessages = async () => {
+            try {
+                const response = await axios.post(`${getAllMessage}`, {
+                    from: from,
+                    to: to,
+                });
+                setMessagesFromDatabase(response.data.response);
+            } catch (err) {
+                console.log(err)
+            }
+        }
+        fetchMessages();
+    }, [messagesFromDataBase]);
 
     return (
         <div className="min-h-screen flex flex-col bg-gray-100">
@@ -188,29 +213,24 @@ function DirectMessage() {
                     className="border p-2 rounded w-full mr-2"
                     onKeyDown={handleKeyDown}
                 />
-
-
-                {
-                    !isEditingMessage ? (<> <button
+                {!isEditingMessage ? (
+                    <button
                         onClick={handleMessageSend}
                         className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-700"
                     >
-
-                        send
-                    </button></>) : (<> <button
+                        Send
+                    </button>
+                ) : (
+                    <button
                         onClick={handleMessageFinalEdit}
                         className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-700"
                     >
-
                         Edit
-                    </button></>)
-                }
-
-
-            </div >
-        </div >
+                    </button>
+                )}
+            </div>
+        </div>
     )
 }
-
 
 export default DirectMessage

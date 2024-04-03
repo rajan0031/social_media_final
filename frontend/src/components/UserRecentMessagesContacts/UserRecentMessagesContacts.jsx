@@ -4,6 +4,9 @@ import { recentMessage } from '../../../utils/RecentMessages/RecentMessages';
 import axios from "axios"
 import { useNavigate } from 'react-router-dom';
 
+import UsersRecentVideoCalls from '../UsersRecentVideoCalls/UsersRecentVideoCalls';
+
+import UserCalledTheCurrentLocalUser from '../UsersRecentVideoCalls/UserCalledTheCurrentLocalUser';
 
 function UserRecentMessagesContacts() {
 
@@ -73,6 +76,17 @@ function UserRecentMessagesContacts() {
                     </p>
                 </div>
             ))) : (<>no recent messages</>)}
+
+            <div>
+                This the section for the recent Video calls from the users for you
+                <UsersRecentVideoCalls />
+            </div>
+
+            <div>
+                the different users have called the current local user
+
+                <UserCalledTheCurrentLocalUser user={user} />
+            </div>
         </div>
     )
 }

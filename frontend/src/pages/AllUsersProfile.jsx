@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useRef } from 'react'
 import { useLocation } from 'react-router-dom';
 import { alluserProfile } from "../../utils/apiRoutes";
 import axios from 'axios';
@@ -10,6 +10,10 @@ import { ToastContainer } from 'react-toastify';
 
 import { followerDetails } from '../../utils/follow_following_utils/apiFollowAndFollowingRoutes';
 import { Unfollowings } from '../../utils/follow_following_utils/apiFollowAndFollowingRoutes';
+import { io } from "socket.io-client";
+
+import { host } from '../../utils/apiRoutes';
+
 
 
 
@@ -17,6 +21,11 @@ import { Unfollowings } from '../../utils/follow_following_utils/apiFollowAndFol
 
 
 function AllUsersProfile() {
+
+
+    const socket = useRef();
+
+
     const location = useLocation();
     const userId = location.state?.id;
     // const currentUserId = location.state?.currentUserId;
@@ -56,6 +65,23 @@ function AllUsersProfile() {
 
     // end of localstorage user
 
+    // start yaha se mera current user from the local storage aa gaya
+
+    useEffect(() => {
+        if (localStorageUser) {
+            socket.current = io(host);
+            socket.current.emit("add-user", localStorageUser._id);
+        }
+
+        // Cleanup socket connection on unmount
+        return () => {
+            if (socket.current) {
+                socket.current.disconnect();
+            }
+        };
+    }, [localStorageUser]);
+
+
 
 
     useEffect(() => {
@@ -74,6 +100,7 @@ function AllUsersProfile() {
                 to: currentUserDetails.userId,
                 fromName: localStorageUser.username,
                 toName: author,
+
             },
         });
         console.log("the user name is :", currentUserDetails);
@@ -158,8 +185,19 @@ function AllUsersProfile() {
     // start of the handling the video call features
 
     const handleVideoCall = () => {
-        console.log("clicked");
-        navigate("/videocall");
+        // console.log("clicked");
+
+        const callId = Math.floor((Math.random(5) * 100000000));
+        // console.log(callId)
+
+        navigate("/videocall", {
+            state: {
+                from: localStorageUser._id,
+                to: userId,
+                callId: callId
+
+            }
+        });
     }
 
     // end of the handling the video call feature

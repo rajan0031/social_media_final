@@ -117,6 +117,11 @@ export const getAllMessage = `${host}/getallmessage`;
 // export const getAllMessage = `${host}/getallmessage`;
 
 
+// this is my temporary way of getting all the  users from the data base api
+
+export const getAllusers = `${host}/getallusers`;
+
+
 
 
 

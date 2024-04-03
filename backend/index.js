@@ -2,6 +2,12 @@ const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors")
 const app = express();
+
+// start of my web socket implimentations
+const socket = require("socket.io");
+
+
+//end of my web socket implimentations
 const userRoutes = require("./routes/userRoutes")
 const blogRoutes = require("./routes/blogRoutes");
 const commentRoutes = require("./routes/comments");
@@ -16,6 +22,8 @@ const messageEditAndDeleteRoute = require("./routes/message_edit_and_delete_rout
 const searchResultsRoutes = require("./routes/searchResultsRoutes/searchResultsRoutes");
 
 const recentMessageRoutes = require("./routes/recentMessagesRoutes/recentMessagesRoutes");
+
+const videoCallRoutes = require("./routes/VideoCallApiRoutes/VideoCallApiRoutes")
 
 
 
@@ -73,6 +81,10 @@ app.use('/', searchResultsRoutes);
 
 app.use('/', recentMessageRoutes);
 
+// this is the my video call feature routes
+
+app.use('/', videoCallRoutes);
+
 
 
 
@@ -95,10 +107,89 @@ app.get("/", (req, res) => {
 
 
 const PORT = process.env.PORT || 8080;  // specify the port number
-app.listen(process.env.PORT, (err) => {
+const server = app.listen(process.env.PORT, (err) => {
     if (err) {
         console.log(err);
     }
     console.log(`Server is running at http://localhost:${PORT}`);
 });
 
+
+// start of the implimentations of the socket io
+
+/*
+
+// here we are implenting the socket.io 
+const io = socket(server, {
+    cors: {
+        origin: "http://localhost:5173",
+        credential: true,
+    }
+});
+
+
+
+// the above is our io it is ready 
+
+global.onlineUsers = new Map();
+
+io.on("connection", (socket) => {
+    global.chatSocket = socket;   // this will be used to emit messages from anywhere in the code
+
+    socket.on("add-user", (userId) => {
+
+        onlineUsers.set(userId, socket.id);
+    });
+
+    socket.on('send-msg', (data) => {
+        const sendUserSocket = onlineUsers.get(data.to);
+
+        if (sendUserSocket) {
+            socket.to(sendUserSocket).emit("msg-recieve", data.message);
+        };
+
+    })
+
+});
+
+
+
+
+// end of the implimentations of the socket io
+
+*/
+
+
+// Initialize socket.io
+const io = socket(server, {
+    cors: {
+        origin: "http://localhost:5173",
+        credentials: true, // Fixing typo in "credential" to "credentials"
+    }
+});
+
+// Map to store online users
+const onlineUsers = new Map();
+
+// Event listener for new socket connections
+io.on("connection", (socket) => {
+    console.log("New socket connection:", socket.id);
+
+    // Event listener for adding a new user
+    socket.on("add-user", (userId) => {
+        console.log("User added:", userId);
+        onlineUsers.set(userId, socket.id);
+    });
+
+    // Event listener for sending messages
+    socket.on('send-msg', (data) => {
+        console.log("Message received:", data);
+        const sendUserSocket = onlineUsers.get(data.to);
+
+        if (sendUserSocket) {
+            socket.to(sendUserSocket).emit("msg-recieve", data.message); // Fixing typo in "msg-recieve" to "msg-receive"
+        } else {
+            console.error("Recipient socket not found");
+        }
+    });
+});

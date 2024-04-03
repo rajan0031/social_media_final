@@ -65,7 +65,7 @@ module.exports.register = async (req, res) => {
 
             });
 
-        }  
+        }
 
     } catch (err) {
         console.log(err)
@@ -153,6 +153,31 @@ module.exports.login = async (req, res) => {
 
 
 // login controllers end point
+
+
+// start of getting all the users from the databse
+
+
+module.exports.getAllusers = async (req, res) => {
+
+    try {
+
+        const response = await User.find({});
+        if (response) {
+            res.json({
+                response: response
+            })
+        }
+
+    } catch (err) {
+        console.log(err)
+    }
+
+}
+
+
+// end of the getting all the user s form the datanbse
+
 
 
 

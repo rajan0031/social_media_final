@@ -9,6 +9,8 @@ import { editUserProfile } from '../../utils/apiRoutes';
 import { useNavigate } from 'react-router-dom';
 import message from "../assets/message.png"
 
+import AllUsers from '../components/AllUsers/AllUsers';
+
 
 
 function UserProfile() {
@@ -550,8 +552,18 @@ function UserProfile() {
             >
                 Click to Chat
             </button> */}
+
+
+
+
+            <AllUsers />
+
             <ToastContainer />
+
+
         </div >
+
+
     );
 }
 

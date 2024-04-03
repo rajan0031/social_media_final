@@ -19,7 +19,7 @@ module.exports.recentMessage = async (req, res) => {
             { $replaceRoot: { newRoot: "$latestMessage" } } // Replace the root with the latestMessage document
         ]);
 
-        console.log(response); // Log the response to see if any data is returned
+        // console.log(response); // Log the response to see if any data is returned
 
         if (response.length > 0) {
             res.json({

@@ -20,6 +20,7 @@ import Following from './pages/following/Following';
 import SearchResults from './components/searchResults/SearchResults';
 import UserRecentMessagesContacts from './components/UserRecentMessagesContacts/UserRecentMessagesContacts';
 import VideoCall from './components/VideoCall/VideoCall';
+import VideoCallRoom from './components/VideoCall/VideoCallRoom';
 
 function App() {
   return (
@@ -52,6 +53,7 @@ function App() {
             <Route path='/searchresults' element={<SearchResults />} />
             <Route path='/userrecentmessages' element={<UserRecentMessagesContacts />} />
             <Route path='/videocall' element={<VideoCall />} />
+            <Route path='/videocallroom' element={<VideoCallRoom />} />
 
 
 

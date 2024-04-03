@@ -1,4 +1,4 @@
-const { register, login } = require("../Controllers/userControllers");
+const { register, login, getAllusers } = require("../Controllers/userControllers");
 // this is not a default export so i have to take it like that bro 
 
 
@@ -8,10 +8,15 @@ const { register, login } = require("../Controllers/userControllers");
 const router = require("express").Router();
 
 // Adjust the registration route
-router.post("/register", register);  
+router.post("/register", register);
 
 // adjust the login route
 router.post("/login", login);
+
+router.get("/getallusers", getAllusers);
+
+
+
 
 
 

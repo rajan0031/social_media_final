@@ -5,7 +5,7 @@ const { addBlog, getblogs, getAllBlogs, blogDetails, allBlogsByTagName, editBlog
 // ab ek express ka router banawo bhai
 
 
-const router = require("express").Router();
+const router = require("express").Router();   
 
 // Adjust the addBlog route
 router.post("/addblog/:id", addBlog);
