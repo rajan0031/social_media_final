@@ -6,6 +6,8 @@ import 'react-toastify/dist/ReactToastify.css';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { editBlog } from '../../utils/apiRoutes';
 // import { useLocation } from 'react-router-dom';
+import { useRef } from 'react';
+import JoditEditor from 'jodit-react';
 
 function EditBlog() {
 
@@ -27,6 +29,8 @@ function EditBlog() {
     const [imageUrl, setImageURL] = useState('');
     const [featured, setFeatured] = useState(false);
     const [postId, setPostId] = useState("");
+
+    const editor = useRef(null);
 
     // redirect to register page if user is not register in the database
 
@@ -216,14 +220,24 @@ function EditBlog() {
                     <label htmlFor="content" className="block text-gray-700 font-bold mb-2">
                         Content
                     </label>
-                    <textarea
+                    {/* <textarea
                         value={content}
                         id="content"
                         name="content"
                         placeholder="Enter blog content"
                         onChange={(e) => setContent(e.target.value)}
                         className="w-full border rounded-md p-2 focus:outline-none focus:border-blue-500"
-                    ></textarea>
+                    ></textarea> */}
+
+
+                    <JoditEditor
+                        ref={editor}
+                        onChange={newContent => setContent(newContent)}
+                        value={content}
+                    />
+
+
+
                 </div>
 
                 {/* tags starts */}

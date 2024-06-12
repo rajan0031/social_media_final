@@ -13,12 +13,17 @@ import unlike from "../assets/love.png";
 import like from "../assets/heart.png";
 import { addLikes } from "../../utils/apiRoutes"
 import { getLikes } from '../../utils/apiRoutes';
-
+import CommentsReply from '../components/CommentsReply/CommentsReply';
 
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 import chat from "../assets/chat.png";
+
+import savedPost from "../assets/saved post.png";
+import unsavedPost from "../assets/unsaved post.png";
+import { AddPostsToProfile } from '../../utils/PostSavingToUserProfileApiRoutes/PostSavingToUserProfileApiRoutes';
+
 
 function ViewBlogInDetails() {
 
@@ -29,7 +34,8 @@ function ViewBlogInDetails() {
     const [showComments, setShowComments] = useState(false);
     const [allComments, setAllComments] = useState([]);
     const [postId, setPostId] = useState();
-    const [currentUser, setCurrentUser] = useState("");// this is showing the current user name of the localstorage
+    const [currentUser, setCurrentUser] = useState("");
+    // this is showing the current user name of the localstorage
     // find the user id of the post 
     const [userIdOfPost, setUserIdOfPost] = useState("");
     // finding the current userId from storage location
@@ -58,7 +64,13 @@ function ViewBlogInDetails() {
 
     const [likesCountFromDatabase, setLikesCountsFromDataBase] = useState(0);
     const [likesTogglersFromDatabase, setLikesTogglersFromDataBase] = useState(0);
+    const [loadMoreComments, setLoadMoreComments] = useState(false);
+    const [savedPostFlag, setSavedPostFlag] = useState(false);
 
+    // this in new html to text conversion things
+    const [htmlContent, setHtmlContent] = useState("set Dummy");
+
+    // end of the html conversions things
 
 
 
@@ -95,8 +107,8 @@ function ViewBlogInDetails() {
         setPostId(blogDetails._id);// id of the particular post
         setUserIdOfPost(blogDetails.id);// id of the pwerson who have posted it
 
-
     }, []);
+
 
 
 
@@ -449,13 +461,62 @@ function ViewBlogInDetails() {
     // }, [handleLikes, likeToggler])
 
 
+    // start of the load more commenys
 
+    const hanldeLoadMoreComments = () => {
+        console.log("clicked");
+        setLoadMoreComments(true);
+    }
+
+    // eod of the load mor commesnt
+
+    // start of the saving the post to user profile
+
+    const handleSaveToUserProfile = async (blogDetails) => {
+        try {
+            const response = await axios.post(`${AddPostsToProfile}`, {
+
+                userId: currentUserId,
+                postDetails: blogDetails,
+                savedStatus: true,
+
+            });
+            console.log(response);
+        } catch (err) {
+            console.log(err);
+        }
+
+        // console.log(currentUserId);
+    }
+
+    //end of the saving the post to the user profile
+    // Convert HTML content to plain text
+    useEffect(() => {
+        if (blogDetails.content) {
+            const textContent = showContents(blogDetails.content);
+            setHtmlContent(textContent);
+        }
+    }, [blogDetails.content]);
+
+    // this is the function which will show my contents 
+
+    const showContents = (html) => {
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(html, 'text/html');
+        // setHtml_contents(doc.body.textContent);
+        return doc.body.textContent || "";
+    };
+
+
+    // end of the function which will show my contents 
 
 
 
 
     return (
-        <>
+
+
+        <div className='bg-slate-500'>
 
 
             <div className="container mx-auto mt-10">
@@ -492,7 +553,9 @@ function ViewBlogInDetails() {
 
 
                     </div>
-                    <p className="text-gray-800">{blogDetails.content}</p>
+
+                    <p className="text-gray-800"> {htmlContent} </p>
+
 
 
                     <div className=' flex justify-between'>
@@ -501,6 +564,16 @@ function ViewBlogInDetails() {
                             <img className='w-10 h-10' src={chat} alt="comments" />
                             <span className="ml-2">Add Comment</span>
                         </button>
+
+                        {/*  start of the  thi sis button for the save the post to read for later */}
+
+                        <button className="focus:outline-none">
+                            <img onClick={() => handleSaveToUserProfile(blogDetails)} className="w-10 h-10 hover:opacity-75 transition duration-300" src={savedPost} alt="Save Post" />
+                        </button>
+
+
+
+                        {/* end of the  thi sis button for the save the post to read for later */}
 
                         {/* Like/Unlike Button */}
                         <button className={`mt-4 ${likeToggler || likesTogglersFromDatabase ? 'text-red-500' : 'text-gray-500'} font-bold flex items-center focus:outline-none`} onClick={() => handleLikes(blogDetails._id)}>
@@ -590,10 +663,29 @@ function ViewBlogInDetails() {
                 showComments && (
                     <div>
                         <h2 className="text-2xl font-bold mb-4">All Comments</h2>
-                        {allComments.map((comment, index) => (
+
+                        {/* //  thi sis the start section for the loading all the comments
+ */}
+
+                        <div className="mt-4 flex justify-center">
+                            {
+                                !loadMoreComments && (<>  <button
+                                    onClick={hanldeLoadMoreComments}
+                                    className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded transition duration-300 ease-in-out"
+                                >
+                                    Load All Comments
+                                </button></>)
+                            }
+                        </div>
+
+
+                        {/*  this is the end of the  getting the all the comments from the thi spost */}
+
+                        {!loadMoreComments && allComments.slice(0, 3).map((comment, index) => (
                             <div key={index} className="border p-4 mb-4 rounded">
                                 <p className="text-lg font-bold mb-2">{comment.author}</p>
                                 <p className="text-gray-800 mb-2">{comment.comment}</p>
+
                                 <span className="text-gray-600 text-sm">
                                     {!commentEdited && (<span>Posted on </span>)}  {new Date(comment.date).toLocaleString('en-US', {
                                         year: 'numeric',
@@ -605,6 +697,8 @@ function ViewBlogInDetails() {
 
                                     })}
                                 </span>
+                                <CommentsReply comment={comment} />
+
 
 
                                 {
@@ -625,6 +719,50 @@ function ViewBlogInDetails() {
 
                             </div>
                         ))}
+
+                        {/* // al the comments start loadling function goes here */}
+
+                        {loadMoreComments && allComments.map((comment, index) => (
+                            <div key={index} className="border p-4 mb-4 rounded">
+                                <p className="text-lg font-bold mb-2">{comment.author}</p>
+                                <p className="text-gray-800 mb-2">{comment.comment}</p>
+
+                                <span className="text-gray-600 text-sm">
+                                    {!commentEdited && (<span>Posted on </span>)}  {new Date(comment.date).toLocaleString('en-US', {
+                                        year: 'numeric',
+                                        month: 'long',
+                                        day: 'numeric',
+                                        hour: 'numeric',
+                                        minute: 'numeric',
+                                        hour12: true,
+
+                                    })}
+                                </span>
+                                <CommentsReply comment={comment} />
+
+
+
+                                {
+                                    currentUser === comment.author && (
+                                        <div className="mt-4 flex items-center space-x-4">
+                                            <button className="text-blue-500 hover:underline" onClick={() => handleEditComment(comment.comment, comment._id)}>
+                                                Edit Comment
+                                            </button>
+                                            <button className="text-red-500 hover:underline" onClick={() => handleDeleteComment(comment._id)}>
+                                                Delete Comment
+                                            </button>
+                                        </div>
+
+
+                                    )
+                                }
+
+
+                            </div>
+                        ))}
+
+                        {/* // al the comments ends loadling function goes here */}
+
                     </div >
 
                 )
@@ -636,7 +774,7 @@ function ViewBlogInDetails() {
 
 
             <ToastContainer />
-        </>
+        </div>
     );
 }
 

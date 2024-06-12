@@ -21,3 +21,14 @@ router.get("/getallusers", getAllusers);
 
 
 module.exports = router;
+
+
+
+
+// const: Keyword in JavaScript for declaring constants.
+// router: Variable name referring to an instance of the Express router.
+// require("express").Router(): Imports the Express module and accesses its Router function to create a new router object.
+// So, in summary:
+
+// Creates a constant named router.
+// Sets it to an instance of the Express router created using the Router() function from the Express module.

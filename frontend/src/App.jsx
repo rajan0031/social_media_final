@@ -21,6 +21,13 @@ import SearchResults from './components/searchResults/SearchResults';
 import UserRecentMessagesContacts from './components/UserRecentMessagesContacts/UserRecentMessagesContacts';
 import VideoCall from './components/VideoCall/VideoCall';
 import VideoCallRoom from './components/VideoCall/VideoCallRoom';
+import GroupChatRoom from './components/GroupChatRoom/GroupChatRoom';
+import GroupsListAll from './pages/GroupsListAll/GroupsListAll';
+import GroupInformation from './pages/GroupInformation/GroupInformation';
+import ProfileSettings from './components/ProfileSettings/ProfileSettings';
+import UsersSavedPosts from './pages/UsersSavedPosts/UsersSavedPosts';
+import AllBlogsPosts from './components/AllBlogsPosts/AllBlogsPosts';
+import CreateBlogEditor from './components/CreateBlogEditor/CreateBlogEditor';
 
 function App() {
   return (
@@ -54,9 +61,13 @@ function App() {
             <Route path='/userrecentmessages' element={<UserRecentMessagesContacts />} />
             <Route path='/videocall' element={<VideoCall />} />
             <Route path='/videocallroom' element={<VideoCallRoom />} />
-
-
-
+            <Route path='/groupchatroom' element={<GroupChatRoom />} />
+            <Route path='/myallgroups' element={<GroupsListAll />} />
+            <Route path='/groupinformation' element={<GroupInformation />} />
+            <Route path='/profilesettings' element={<ProfileSettings />} />
+            <Route path='/mysavedposts' element={<UsersSavedPosts />} />
+            <Route path='/allblogsposts' element={<AllBlogsPosts />} />
+            <Route path='/createblogeditor' element={<CreateBlogEditor />} />
 
 
 

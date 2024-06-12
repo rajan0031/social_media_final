@@ -5,12 +5,15 @@ import { useNavigate } from 'react-router-dom';
 import ViewBlogInDetails from './ViewBlogInDetails';
 import { blogsDetails } from '../../utils/apiRoutes';
 import { allBlogsByTagName } from '../../utils/apiRoutes';
-import chat from "../assets/chat.png"
-import read from "../assets/read.png"
+import chat from "../assets/chat.png";
+import read from "../assets/read.png";
 import unlike from "../assets/love.png";
 import like from "../assets/heart.png";
-import { addLikes } from "../../utils/apiRoutes"
+import { addLikes } from "../../utils/apiRoutes";
+import SliderHome from './SliderHome/SliderHome';
+
 // import { getLikes } from '../../utils/apiRoutes';
+
 
 
 function Home() {
@@ -169,46 +172,67 @@ function Home() {
     }
 
 
+    // start of the getting all the blogs posts
+
+    const hanldeAllblogsPosts = () => {
+        console.log("clicked");
+        navigate("/allblogsposts");
+    }
+
+    //end of the getting teh all the blogs posts
+
 
 
 
 
 
     return (
-        <div className="container mx-auto px-10  mt-10">
+        
+        <div className="container bg-slate-500 mx-auto">
+            <SliderHome />
             <div className="mt-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                {blogs.map((blog, index) => (
-                    <div key={index * 2 + 1} className="border p-4 rounded bg-white shadow hover:shadow-lg transition duration-300">
+                {blogs.slice(0, 6).map((blog, index) => (
+                    <div key={index * 2 + 1} className="border p-4 rounded bg-white shadow-md transform hover:scale-105 transition duration-300 ease-in-out">
                         <img src={blog.imageUrl} alt={blog.title} className="w-full h-32 object-cover mb-4 rounded" />
                         <h2 className="text-xl font-bold mb-2">{blog.title}</h2>
-                        <button onClick={() => handleAuthorProfile(blog)}>   <p className="text-gray-600 mb-2">{blog.author}</p></button>
+                        <button onClick={() => handleAuthorProfile(blog)}>
+                            <p className="text-gray-600 mb-2">{blog.author}</p>
+                        </button>
                         <p className="text-gray-500">{blog.category}</p>
                         <div className="flex mt-4 space-x-2">
                             {blog.tags.map((tag, tagIndex) => (
                                 <button onClick={() => handleTags(tag)}
                                     key={tagIndex + 1}
-                                    className=" bg-green-300 hover:bg-green-400 text-green-800 py-1 px-2 rounded transition duration-300 ease-in-out"
+                                    className="bg-green-300 hover:bg-green-400 text-green-800 py-1 px-2 rounded transition duration-300 ease-in-out"
                                 >
-                                    <span key={tagIndex} className="px-2 py-1  text-xs text-gray-700 rounded">
+                                    <span key={tagIndex} className="px-2 py-1 text-xs text-gray-700 rounded">
                                         {tag}
                                     </span>
                                 </button>
                             ))}
                         </div>
-                        <div className="flex justify-between items-center ">
-                            <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-4" onClick={() => handleBlogsDetails(blog._id)}>
-                                <img className='w-10 h-10' src={read} alt="read more" />
+                        <div className="flex justify-between items-center mt-4">
+                            <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" onClick={() => handleBlogsDetails(blog._id)}>
+                                Read More
                             </button>
-                            <button className="text-white font-bold py-2 px-4 rounded mt-4" onClick={() => handleLikes(blog._id)}>
-                                <img className='w-10 h-10' src={likesMap[blog._id] ? like : unlike} alt="read more" />
-                                <span className='text-blue-900' >{likeCountMap[blog._id]}</span>
+                            <button className="text-white font-bold py-2 px-4 rounded" onClick={() => handleLikes(blog._id)}>
+                                Like
                             </button>
                         </div>
                     </div>
                 ))}
             </div>
+
+            <div className="flex justify-center mt-8">
+                <button onClick={hanldeAllblogsPosts} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded transition duration-300 ease-in-out">
+                    All Blogs
+                </button>
+            </div>
+
+
         </div>
     );
+
 }
 
 export default Home;

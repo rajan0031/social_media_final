@@ -7,6 +7,8 @@ import { getAllMessage } from '../../utils/apiRoutes';
 import { editMessage } from '../../utils/message_edit_and_delete_api_routes/messageEditDeleteApiRoutes';
 import { deleteMessage } from '../../utils/message_edit_and_delete_api_routes/messageEditDeleteApiRoutes';
 import { io } from "socket.io-client";
+import deleteMessageIcons from "../assets/delete message.gif"
+import EditMessageIcons from "../assets/editMessage.gif";
 
 function DirectMessage() {
     const location = useLocation();
@@ -183,18 +185,19 @@ function DirectMessage() {
                                     {msg.from === from ? fromName : toName}
                                 </span>
                                 {msg.from === from && (
-                                    <div className="flex space-x-2">
+                                    <div className="flex space-x-2 justify-between">
                                         <button
                                             onClick={() => handleEdit(msg)}
                                             className="text-xs text-gray-300 hover:text-gray-500"
                                         >
-                                            Edit
+                                            <img className='w-5 h-5' src={EditMessageIcons} alt="" />
                                         </button>
                                         <button
                                             onClick={() => handleDelete(msg)}
                                             className="text-xs text-red-500 hover:text-red-700"
                                         >
-                                            Delete
+                                            <img className='w-5 h-5'
+                                                src={deleteMessageIcons} alt="" />
                                         </button>
                                     </div>
                                 )}

@@ -30,6 +30,7 @@ function NavBar() {
 
     // Function to toggle the mobile menu state
     const toggleMobileMenu = () => {
+        console.log("Toggling mobile menu"); // Add this line
         setMobileMenuOpen(!mobileMenuOpen);
         console.log("clicked");
     };

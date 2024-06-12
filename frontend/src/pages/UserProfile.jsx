@@ -7,9 +7,12 @@ import 'react-toastify/dist/ReactToastify.css';
 import { getUserProfile } from '../../utils/apiRoutes';
 import { editUserProfile } from '../../utils/apiRoutes';
 import { useNavigate } from 'react-router-dom';
-import message from "../assets/message.png"
+import message from "../assets/message.png";
 
 import AllUsers from '../components/AllUsers/AllUsers';
+import accountsSettings from "../assets/accountSetting.png";
+import savedPOst from "../assets/saved post.png";
+import unsavedPost from "../assets/unsaved post.png";
 
 
 
@@ -22,6 +25,10 @@ function UserProfile() {
     const [handleEdit, setHandleEdit] = useState(false);
     const [handleFinalEdit, setHandleFinalEdit] = useState(false);
     const [submit, setSubmit] = useState(false);
+    const [CreateGroupFlag, setCreateGroupFlag] = useState(false);
+
+
+
     const navigate = useNavigate();
 
 
@@ -275,6 +282,38 @@ function UserProfile() {
     // end of the recent message section
 
 
+    // start of the handling all groups that i created 
+
+    const handleMyGroupsLists = () => {
+        navigate("/myallgroups", {
+            state: {
+                user: user,
+            }
+        })
+    }
+
+    // end of the handling all the groups i have created
+
+    // start of the handling the group creations 
+
+    const handleGroupCreations = () => {
+        // console.log("Clicked");
+        setCreateGroupFlag(true);
+    }
+
+    // end of the handling teh group creations ''
+
+
+    // start of the saving the post in the users profile
+
+    const handleMySavedPosts = () => {
+        // console.log("clicked");
+        navigate("/mysavedposts");
+    }
+
+    // end of the saving the post in the user profile
+
+
 
 
 
@@ -299,7 +338,7 @@ function UserProfile() {
 
             {
                 profileCompleted === true ? (<>  <div className="bg-gray-100 min-h-screen flex items-center justify-center">
-                    <div className="bg-white p-10 rounded shadow-md max-w-xl">
+                    <div className="bg-white p-10 rounded shadow-md max-w-xxl">
                         <div className="text-center mb-6">
                             <img
                                 src={currentUserProfile?.profileImage}
@@ -347,6 +386,30 @@ function UserProfile() {
                             <div className="mb-4">
                                 <h3 className="text-lg font-semibold mb-2">About Me</h3>
                                 <p className="text-gray-700">{currentUserProfile?.about}</p>
+                                <div className='flex justify-between space-x-4'>
+
+
+
+
+                                    <button
+                                        className="bg-blue-500  hover:bg-blue-600 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline mt-4"
+                                        onClick={handleEditProfile}
+                                    >
+                                        Edit Profile
+                                    </button>
+                                    <button
+                                        className="bg-blue-500  hover:bg-blue-600 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline mt-4"
+                                        onClick={handleFollowers}
+                                    >
+                                        Followers
+                                    </button>
+                                    <button
+                                        className="bg-blue-500  hover:bg-blue-600 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline mt-4"
+                                        onClick={handleFollowings}
+                                    >
+                                        Followings
+                                    </button>
+                                </div>
                             </div>
                         </div>
 
@@ -370,25 +433,36 @@ function UserProfile() {
 
                             <button
                                 className="bg-blue-500  hover:bg-blue-600 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline mt-4"
-                                onClick={handleEditProfile}
-                            >
-                                Edit Profile
+                                onClick={handleMySavedPosts}
+                            >Saved Posts
                             </button>
+
                             <button
                                 className="bg-blue-500  hover:bg-blue-600 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline mt-4"
-                                onClick={handleFollowers}
+                                onClick={handleMyGroupsLists}
                             >
-                                Followers
+                                Groups
                             </button>
-                            <button
-                                className="bg-blue-500  hover:bg-blue-600 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline mt-4"
-                                onClick={handleFollowings}
-                            >
-                                Followings
-                            </button>
+
+
                         </div>
                     </div>
                 </div>
+
+                    {
+                        !CreateGroupFlag && (<>
+                            <div className="flex flex-col items-center justify-center space-y-4">
+                                <h3 className="text-3xl font-semibold text-center text-gray-800 mb-4">
+                                    Click below to create groups
+                                </h3>
+                                <button
+                                    onClick={handleGroupCreations}
+                                    className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-3 px-6 rounded-lg shadow-md transition duration-300 ease-in-out transform hover:scale-105">
+                                    Create Groups
+                                </button>
+                            </div>
+                        </>)
+                    }
 
                 </>) : (
                     <div className="max-w-md mx-auto mt-10 p-6 bg-white rounded-md shadow-md">
@@ -554,9 +628,13 @@ function UserProfile() {
             </button> */}
 
 
+            {/* this i have done to for the more good looks of my page */}
+
+            {
+                CreateGroupFlag && <AllUsers />
+            }
 
 
-            <AllUsers />
 
             <ToastContainer />
 

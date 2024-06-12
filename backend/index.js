@@ -24,6 +24,23 @@ const searchResultsRoutes = require("./routes/searchResultsRoutes/searchResultsR
 const recentMessageRoutes = require("./routes/recentMessagesRoutes/recentMessagesRoutes");
 
 const videoCallRoutes = require("./routes/VideoCallApiRoutes/VideoCallApiRoutes")
+// this is the api routes for the adding the reply to a comments
+const CommentsReplyRoutes = require("./routes/CommentsReplyRoutes/CommentsReplyRoutes");
+// this is the api route for the adding the rply for a reply
+const replyForReplyRoutes = require("./routes/ReplyForReplyApiRoutes/ReplyForReplyApiRoutes");
+// this is the GroupChatRoomMessage routes for handling all types of edit add update and delete the data
+
+const groupChatRoomMessagesRoutes = require("./routes/GroupChatRoomBackendRoutes/GroupChatRoomBackendRoutes");
+
+// this is the api routes for the handling the chats and messages in the groups and all in my social media brother
+
+const groupMessagesRoutes = require("./routes/GroupMessagesBackedRoutes/GroupMessagesBackedRoutes");
+
+// this is the api routes for handling the saving post in the user profile
+
+const AddPostsToUserProfileRoutes = require("./routes/SavingPostsBackendApiRoutes/SavingPostsBackendApiRoutes");
+
+
 
 
 
@@ -85,20 +102,49 @@ app.use('/', recentMessageRoutes);
 
 app.use('/', videoCallRoutes);
 
+// this is the my COmments reply routes for the receiving my end points on the backend 
+app.use('/', CommentsReplyRoutes);
+
+// this is for the handlng the reply fo reply routes
+
+app.use('/', replyForReplyRoutes);
+
+// this is for handling the groupChatRommMessages routes
+app.use('/', groupChatRoomMessagesRoutes);
+
+// this is the for handling the group chat and messages functionality in the group
+
+app.use('/', groupMessagesRoutes);
+
+
+// this is the for handling the saved posts
+// in the profile sections of the user
+
+app.use('/', AddPostsToUserProfileRoutes);
 
 
 
 
 
-
-// database connections 
+// // database connections 
 mongoose.connect(`mongodb://127.0.0.1:27017/${process.env.LINK}`).then(() => {
     console.log("Database connected succesfully")
 }).catch((err) => {
     console.log(err)
 });
 
-// database connection ended
+// // database connection ended
+
+// start of the atlas database connections
+
+
+// mongoose.connect("mongodb+srv://raykushwaha0031:KkMUpU80pob78TLJ@blog.zlf5agh.mongodb.net/?retryWrites=true&w=majority&appName=Blog").then((res) => {
+//     console.log("database is connected succ");
+// }).catch((err) => {
+//     console.log(err)
+// })
+
+// end of the atlas database connections
 
 
 app.get("/", (req, res) => {

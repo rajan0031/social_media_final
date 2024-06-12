@@ -5,10 +5,18 @@ import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useNavigate } from 'react-router-dom';
 import { useLocation } from 'react-router-dom';
+import { useRef, useMemo } from 'react';
+
+import JoditEditor from 'jodit-react';
+
 
 function CreateBlog() {
     const location = useLocation();
     const message = location.state?.message;
+
+    const [createBlogEditorTool, setCreateBlogEditorTool] = useState(false);
+    const [isChecked, setIsChecked] = useState(false);
+
 
     // console.log(message);
     const navigate = useNavigate();
@@ -21,6 +29,7 @@ function CreateBlog() {
     const [imageUrl, setImageURL] = useState('');
     const [featured, setFeatured] = useState(false);
 
+    const editor = useRef(null);
 
 
     // redirect to register page if user is not register in the database
@@ -104,8 +113,26 @@ function CreateBlog() {
     ];
 
 
+
+
+
+
+    const handleBlogEditorTool = () => {
+        navigate("/createblogeditor");
+    };
+
+
     return (
         <>
+
+            <div className="m-10">
+                <div className="text-center">
+                    <button onClick={handleBlogEditorTool} className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        Open Editor Tool
+                    </button>
+                </div>
+            </div>
+
             {/* <h1>{message}</h1> */}
             <form onSubmit={handleSubmit} className="max-w-2xl mx-auto mt-8 p-8 border rounded-md shadow-lg bg-white mb-8">
                 <h2 className="text-2xl font-semibold mb-4">Create a New Blog</h2>
@@ -182,13 +209,23 @@ function CreateBlog() {
                     <label htmlFor="content" className="block text-gray-700 font-bold mb-2">
                         Content
                     </label>
-                    <textarea
+                    {/* <textarea
                         id="content"
                         name="content"
                         placeholder="Enter blog content"
                         onChange={(e) => setContent(e.target.value)}
                         className="w-full border rounded-md p-2 focus:outline-none focus:border-blue-500"
-                    ></textarea>
+                    ></textarea> */}
+
+                    {/* using the jodit editor handleRemoveMemberFromGroup
+                     */}
+
+                    <JoditEditor
+                        ref={editor}
+                        value={content}
+                        onChange={newContent => setContent(newContent)}
+                    />
+
                 </div>
 
                 {/* tags starts */}

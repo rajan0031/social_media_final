@@ -2,11 +2,32 @@
 @tailwind components;
 @tailwind utilities;
 
-
 .message_input_field {
   position: sticky;
   background-color: aqua;
   position: static;
 }
 
+.custom-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: #4a5568 #cbd5e0;
+  max-height: 100%;
+  overflow-y: auto;
+}
 
+.custom-scrollbar::-webkit-scrollbar {
+  width: 8px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: #cbd5e0;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background-color: #4a5568;
+  border-radius: 4px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #4c566a;
+}

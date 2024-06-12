@@ -21,6 +21,7 @@ function Register() {
     // State variables
     const [username, setusername] = useState("");
     const [email, setemail] = useState("");
+    const [profilePicture, setProfilePicture] = useState("");
     const [password, setpassword] = useState("");
     const [conform_password, setconform_password] = useState("");
 
@@ -120,6 +121,7 @@ function Register() {
                                         setemail(e.target.value)
                                     })} required />
                                 </div>
+
 
                                 {/* password section  */}
 
