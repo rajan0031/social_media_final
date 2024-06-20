@@ -5,22 +5,27 @@ const { register, login, getAllusers } = require("../Controllers/userControllers
 // ab ek express ka router banawo bhai
 
 
+const express = require("express");
+const app = express();
+
+// const router = require("express").Router();
+
 const router = require("express").Router();
 
 // Adjust the registration route
-router.post("/register", register);
+app.post("/register", register);
 
 // adjust the login route
-router.post("/login", login);
+app.post("/login", login);
 
-router.get("/getallusers", getAllusers);
-
-
+app.get("/getallusers", getAllusers);
 
 
 
 
-module.exports = router;
+
+
+module.exports = app;
 
 
 
